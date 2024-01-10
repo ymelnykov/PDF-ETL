@@ -1,10 +1,10 @@
 """
-PDF files Extract, Transform and Load.
+Extract, Transform and Load pdf files.
 This script is to:
 1. Get all pdf files from the source directory.
 2. Extract year, month and street name data from the files.
 3. Define the merged file name based on the above data.
-4. Define the merge file destination directory based on the above data.
+4. Define the merged file destination directory based on the above data.
 5. Merge the files and write the merged file to the destination directory.
 6. Delete all pdf files in the source directory.
 Done!
@@ -43,7 +43,7 @@ for file in merge_files:
     file_path = os.path.join(source_dir, file)
 
 # Extract the year, month and street name from files
-# to form the merged file name
+# to define the merged file name
     if merged_file_name is None:
         reader = PdfReader(file_path)
         text = reader.pages[0].extract_text()
@@ -58,17 +58,19 @@ for file in merge_files:
                 merged_file_name = yy + mm + '_' + street_map[street]
                 dest_dir += street + '\\'
                 break
-# Append each pdf file to the merger             
+
+# Append each pdf file to the merger
     merger.append(file_path)
 
-# If no merged file name was formed, use the default one
+# If no merged file name was defined, use the default one
 if merged_file_name is None:
     merged_file_name = '0000_merged_file'
 
-# Define the path to save the merged file.
+# Define the path to save the merged file
+merged_file_path = os.path.join(dest_dir, (merged_file_name + '.pdf'))
+
 # If the file with such name exists in the destiantion directory,
 # append the file name with an ordinal index
-merged_file_path = os.path.join(dest_dir, (merged_file_name + '.pdf'))
 idx = 0
 while os.path.exists(merged_file_path):
     idx += 1
@@ -85,5 +87,5 @@ for file in merge_files:
     file_path = os.path.join(source_dir, file)
     os.remove(file_path)
 
-print(f'{len(merge_files)} pdf files have been merge and saved to',
+print(f'{len(merge_files)} pdf files have been merged and saved to',
       merged_file_path)    
